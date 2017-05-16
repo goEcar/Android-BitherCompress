@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.FROYO)
     public void compressImage(Uri uri) {
         Log.e("===compressImage===", "====开始====uri==" + uri.getPath());
         try {
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
 
             Log.e("===compressImage===", "====开始==压缩==saveFile==" + saveFile.getAbsolutePath());
-            NativeUtil.compressBitmap(bitmap, saveFile.getAbsolutePath());
+            NativeUtil.compressBitmap(bitmap, saveFile.getAbsolutePath(),200);
             Log.e("===compressImage===", "====完成==压缩==saveFile==" + saveFile.getAbsolutePath());
 
         } catch (IOException e) {

@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 public class NativeUtil {
     private static int DEFAULT_QUALITY = 95;
 
+
     /**
      * @param bit      bitmap对象
      * @param fileName 指定保存目录名
@@ -23,11 +24,11 @@ public class NativeUtil {
     /**
      * @param image    bitmap对象
      * @param filePath 要保存的指定目录
+     * @param maxSize  最大尺寸 (kb)
      * @Description: 通过JNI图片压缩把Bitmap保存到指定目录
      */
-    public static void compressBitmap(Bitmap image, String filePath) {
+    public static void compressBitmap(Bitmap image, String filePath, int maxSize) {
         // 最大图片大小 1000KB
-        int maxSize = 1000;
         // 获取尺寸压缩倍数
         int ratio = NativeUtil.getRatioSize(image.getWidth(), image.getHeight());
         // 压缩Bitmap到对应尺寸
@@ -41,7 +42,7 @@ public class NativeUtil {
         int options = 100;
         result.compress(Bitmap.CompressFormat.JPEG, options, baos);
         // 循环判断如果压缩后图片是否大于最大值,大于继续压缩
-        while (baos.toByteArray().length / 1024  > maxSize) {
+        while (baos.toByteArray().length / 1024 > maxSize) {
             // 重置baos即清空baos
             baos.reset();
             // 每次都减少10
@@ -50,7 +51,7 @@ public class NativeUtil {
             result.compress(Bitmap.CompressFormat.JPEG, options, baos);
         }
         // JNI调用保存图片到SD卡 这个关键
-        NativeUtil.saveBitmap(result, options, filePath, true);
+        saveBitmap(result, options, filePath, true);
         // 释放Bitmap
         if (result != null && !result.isRecycled()) {
             result.recycle();
